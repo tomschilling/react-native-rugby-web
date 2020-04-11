@@ -7,31 +7,22 @@ import { createBottomTabNavigator } from 'react-navigation-tabs'
 
 import { SimpleLineIcons } from '@expo/vector-icons';
 
-import JournalScreen from './screens/JournalScreen';
-import PhotosScreen from './screens/PhotosScreen';
+import GameScreen from './screens/GameScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import ItemScreen from './screens/ItemScreen';
-import EditScreen from './screens/EditScreen';
-import TouchableItem from './components/TouchableItem';
 
 const Tabs = createBottomTabNavigator(
   {
-    Journal: {
-      screen: JournalScreen,
+    Matches: {
+      screen: GameScreen,
       navigationOptions: {
-        title: 'Tagebuch'
-      }
-    },
-    Photos: {
-      screen: PhotosScreen,
-      navigationOptions: {
-        title: 'Fotos'
+        title: 'Matches'
       }
     },
     Settings: {
       screen: SettingsScreen,
       navigationOptions: {
-        title: 'Einstellungen'
+        title: 'Settings'
       }
     }
   },
@@ -40,8 +31,7 @@ const Tabs = createBottomTabNavigator(
       tabBarIcon: ({ tintColor }) => {
         const { routeName } = navigation.state;
         let iconName;
-        if (routeName === 'Journal') iconName = 'book-open';
-        else if (routeName === 'Photos') iconName = 'picture';
+        if (routeName === 'Matches') iconName = 'trophy';
         else if (routeName === 'Settings') iconName = 'settings';
 
         return (
@@ -60,28 +50,8 @@ const AppNavigator = createStackNavigator(
   {
     Home: {
       screen: Tabs,
-      navigationOptions: ({ navigation }) => ({
-        headerRight: (
-          <TouchableItem
-            onPress={() => {
-              const newItem = { text: null, photo: null, date: null };
-              navigation.navigate('Edit', { item: newItem });
-            }}
-          >
-            <View>
-              <SimpleLineIcons
-                style={{ padding: 10 }}
-                name="plus"
-                size={24}
-                color="deepskyblue"
-              />
-            </View>
-          </TouchableItem>
-        )
-      })
     },
-    Item: ItemScreen,
-    Edit: EditScreen
+    Item: ItemScreen
   },
   {
     defaultNavigationOptions: {
@@ -90,10 +60,10 @@ const AppNavigator = createStackNavigator(
         ...Platform.select({
           ios: { backgroundColor: 'white' }
         })
+      },
+      cardStyle: {
+        backgroundColor: 'white'
       }
-    },
-    cardStyle: {
-      backgroundColor: 'white'
     }
   }
 );

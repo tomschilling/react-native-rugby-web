@@ -20,7 +20,7 @@ export default class ItemScreen extends Component {
           }
         >
           <View>
-            <Text style={styles.headerAction}>Bearbeiten</Text>
+            <Text style={styles.headerAction}>Details</Text>
           </View>
         </TouchableItem>
       )
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     height: width
   },
   text: {
-    fontSize: 16,
+    fontSize: 25,
     padding: 15
   }
 });

@@ -15,7 +15,7 @@ import TouchableItem from './TouchableItem';
 
 const WINDOW_WIDTH = Dimensions.get('window').width;
 
-export default class JournalItemRow extends Component {
+export default class GameItemRow extends Component {
   state = {
     animSwipe: new Animated.Value(0),
     animHeight: new Animated.Value(75)
@@ -26,7 +26,7 @@ export default class JournalItemRow extends Component {
     this.props.toggleScrolling(true);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this._panResponder = PanResponder.create({
       onMoveShouldSetPanResponder: (evt, gestureState) => true,
       onPanResponderGrant: () => this.props.toggleScrolling(false),

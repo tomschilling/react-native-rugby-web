@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import JournalItems from '../components/JournalItems';
+import GameItems from '../components/GameItems';
 
-export default class JournalScreen extends Component {
+export default class GameScreen extends Component {
   _getSectionTitleFromDate(date) {
     const dateObj = new Date(date);
     const day = dateObj.getDate();
@@ -35,7 +35,7 @@ export default class JournalScreen extends Component {
     const sections = this._getItemsWithSections(items);
     return (
       <View style={styles.container}>
-        <JournalItems
+        <GameItems
           items={sections}
           onPress={item => navigate('Item', { item: item })}
           deleteItem={deleteItem}

@@ -1,0 +1,24 @@
+{
+    "games": [
+        {
+            "id":1,
+            "home": "RK03",
+            "guest": "BRC"
+        },
+        {
+            "id":2,
+            "home": "Hannover 78",
+            "guest": "SC Germania List"
+        },
+        {
+            "id":3,
+            "home": "HRC",
+            "guest": "St. Pauli"
+        },
+        {
+            "id":4,
+            "home": "RC Leipzig",
+            "guest": "Grizzlies Berlin"
+        }
+    ]
+}

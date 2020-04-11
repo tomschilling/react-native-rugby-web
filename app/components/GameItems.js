@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { SectionList, StyleSheet, Text, View } from 'react-native';
 
-import JournalItemRow from './JournalItemRow';
+import GameItemRow from './GameItemRow';
 
-export default class JournalItems extends Component {
+export default class GameItems extends Component {
   state = { scrollEnabled: true };
 
   render() {
     if (this.props.items.length === 0)
       return (
         <View style={styles.noItems}>
-          <Text style={styles.infoText}>Keine Einträge im Tagebuch</Text>
+          <Text style={styles.infoText}>No Matches available</Text>
         </View>
       );
 
@@ -20,7 +20,7 @@ export default class JournalItems extends Component {
         sections={this.props.items}
         scrollEnabled={this.state.scrollEnabled}
         renderItem={({ item }) => (
-          <JournalItemRow
+          <GameItemRow
             item={item}
             onPress={() => this.props.onPress(item)}
             deleteItem={() => this.props.deleteItem(item)}
