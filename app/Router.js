@@ -4,7 +4,6 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 import { SimpleLineIcons } from '@expo/vector-icons';
 
-//import GameScreen from './screens/GameScreen';
 import HomeScreen from './components/Home';
 
 import SettingsScreen from './screens/SettingsScreen';

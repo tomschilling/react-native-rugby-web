@@ -4,10 +4,11 @@ import {
     StyleSheet,
     SafeAreaView,
     View,
-    ActivityIndicator,
-    AsyncStorage
+    ActivityIndicator
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { parseString } from 'react-native-xml2js';
+
 
 //import axios from 'axios';
 
@@ -29,31 +30,26 @@ export default function Home(props) {
     //==================================================================================================
 
     //2 - MAIN CODE BEGINS HERE
-    useEffect(() => getData(), []);
+    useEffect(() => {
+        async function getData () {
+            setIsFetching(true);
 
-    //==================================================================================================
+            const response = await fetch('http://www.rugbyweb.de/db2xml.php?dtd=rugbyweb1.0&league=BL1N')
+            const text = await response.text()
+            let extractedData
+            parseString(text, function(err,result){
+                extractedData = JSON.stringify(result)
+            });
+            const allBL1NorthData = JSON.parse(extractedData)
+            const bl1NorthMatches = allBL1NorthData.rwleague.matches[0].match
 
-    //3 - GET FLATLIST DATA
-    const getData = () => {
-        setIsFetching(true);
-
-        //OPTION 1 - LOCAL DATA
-        AsyncStorage.getItem('games', (err, games) => {
-            console.log('games', games)
-            if (err) alert(err.message);
-            else if (games !== null) dispatch(getGames(JSON.parse(games)));
+            dispatch(getGames(bl1NorthMatches));
 
             setIsFetching(false)
-        });
 
-        //OPTION 2 - FAKE API
-        // let url = "https://my-json-server.typicode.com/mesandigital/demo/games";
-        // axios.get(url)
-        //     .then(res => res.data)
-        //     .then((data) => dispatch(addgames(data)))
-        //     .catch(error => alert(error.message))
-        //     .finally(() => setIsFetching(false));
-    };
+        }
+        getData()
+    }, []);
 
     //==================================================================================================
 
