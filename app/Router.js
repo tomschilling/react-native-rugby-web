@@ -1,29 +1,29 @@
 import React from 'react';
-import { Platform, View } from 'react-native';
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack'
-
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs'
-
 import { SimpleLineIcons } from '@expo/vector-icons';
 
-import GameScreen from './screens/GameScreen';
+//import GameScreen from './screens/GameScreen';
+import HomeScreen from './components/Home';
+
 import SettingsScreen from './screens/SettingsScreen';
-import ItemScreen from './screens/ItemScreen';
+import LoadingScreen from './components/LoadingScreen'
+
 
 const Tabs = createBottomTabNavigator(
   {
     Matches: {
-      screen: GameScreen,
-      navigationOptions: {
-        title: 'Matches'
-      }
+      screen: HomeScreen,
+      navigationOptions: ({ navigation }) => ({
+        title: `Matches`,
+        }),
     },
-    Settings: {
-      screen: SettingsScreen,
-      navigationOptions: {
-        title: 'Settings'
-      }
+    Settings:{
+        screen: SettingsScreen,
+        navigationOptions: ({ navigation }) => ({
+            title: `Settings`,
+        }),
     }
   },
   {
@@ -46,12 +46,11 @@ const Tabs = createBottomTabNavigator(
   }
 );
 
-const AppNavigator = createStackNavigator(
+const AppStack = createStackNavigator(
   {
     Home: {
       screen: Tabs,
-    },
-    Item: ItemScreen
+    }  
   },
   {
     defaultNavigationOptions: {
@@ -68,4 +67,15 @@ const AppNavigator = createStackNavigator(
   }
 );
 
-export default createAppContainer(AppNavigator);
+
+const RoutesStack = createSwitchNavigator(
+    {
+        Loading: LoadingScreen,
+        App: AppStack
+    },
+    {initialRouteName: 'Loading'}
+);
+
+const Router = createAppContainer(RoutesStack);
+
+export default Router;

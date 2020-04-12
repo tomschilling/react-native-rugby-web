@@ -1,26 +1,16 @@
 import React, { Component } from 'react';
-import AppNavigator from './app/AppNavigator';
+import { Provider } from 'react-redux';
+
+import Router from './app/Router';
+
+import store from './app/Store'; //Import the store
 
 export default class App extends Component {
-  state = { items: [] };
-
-  componentDidMount() {
-    this._refreshItems();
-  }
-
-  _refreshItems = async () => {
-    this.setState({ items });
-  };
-
-
   render() {
     return (
-      <AppNavigator
-        screenProps={{
-          items: this.state.items,
-          refresh: this._refreshItems
-        }}
-      />
+      <Provider store={store}>
+          <Router/>
+      </Provider>
     );
   }
 }
