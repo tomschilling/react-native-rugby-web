@@ -12,10 +12,10 @@ import LoadingScreen from './components/LoadingScreen'
 
 const Tabs = createBottomTabNavigator(
   {
-    Matches: {
+    Games: {
       screen: HomeScreen,
       navigationOptions: ({ navigation }) => ({
-        title: `Matches`,
+        title: `Games`,
         }),
     },
     Settings:{
@@ -30,7 +30,7 @@ const Tabs = createBottomTabNavigator(
       tabBarIcon: ({ tintColor }) => {
         const { routeName } = navigation.state;
         let iconName;
-        if (routeName === 'Matches') iconName = 'trophy';
+        if (routeName === 'Games') iconName = 'trophy';
         else if (routeName === 'Settings') iconName = 'settings';
 
         return (
@@ -39,7 +39,7 @@ const Tabs = createBottomTabNavigator(
       }
     }),
     tabBarOptions: {
-      activeTintColor: 'deepskyblue',
+      activeTintColor: 'black',
       inactiveTintColor: '#929292'
     }
   }
@@ -53,12 +53,12 @@ const AppStack = createStackNavigator(
   },
   {
     defaultNavigationOptions: {
-      headerTintColor: 'deepskyblue',
-      headerStyle: {
-        ...Platform.select({
-          ios: { backgroundColor: 'white' }
-        })
-      },
+      headerTintColor: 'black',
+      // headerStyle: {
+      //   ...Platform.select({
+      //     ios: { backgroundColor: 'white' }
+      //   })
+      // },
       cardStyle: {
         backgroundColor: 'white'
       }
