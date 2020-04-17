@@ -6,6 +6,7 @@ import {
     View,
     ActivityIndicator
 } from 'react-native';
+import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { parseString } from 'react-native-xml2js';
 import { getGames } from "../actions/GameActions";
@@ -33,7 +34,13 @@ export default function Home(props) {
 
             const allMatches = await getAllMatches()
 
-            dispatch(getGames(allMatches));
+            const sortedAllMatches = allMatches.sort(function(a, b) {
+                const aDate = moment(a.$.date, "DD.MM.YYYY").toISOString()
+                const bDate = moment(b.$.date, "DD.MM.YYYY").toISOString()
+                return moment(aDate).diff(moment(bDate))
+            });
+
+            dispatch(getGames(sortedAllMatches));
 
             setIsFetching(false)
             
@@ -45,6 +52,7 @@ export default function Home(props) {
     async function getAllMatches() {
 
         let matches = []
+       // let leagueArray = ["BL1N", "BL1S", "BL2N", "BL2O", "BL2S", "BL2W","RLnordost", "RLbayern"]
         let leagueArray = ["BL1N", "BL1S"]
 
         for (league of leagueArray) {
@@ -66,6 +74,8 @@ export default function Home(props) {
              matches.push.apply(matches, leagueMatches);
 
          }
+
+      
 
          return new Promise(resolve => {
             resolve(matches)
