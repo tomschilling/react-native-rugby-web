@@ -9,8 +9,36 @@ let colours = ["#F8F8F8", "#F1F1F1"];
 export default function ListItem ({item, index, navigation}){
     const inputEl = useRef(null);
 
-    const homeTeam  = typeof item.homeTeam[0] === "object" ? item.homeTeam[0]["_"] : item.homeTeam[0]   
-    const awayTeam = item.awayTeam[0]
+    //if (!item) return
+
+   // item = (typeof item === 'object') ? item : item[0]
+
+    //console.log("ListItem -> item", item)
+
+
+    let postponed 
+    let homeTeamScore
+    let awayTeamScore
+    if (item.$ && item.$.status && item.$.status === "1") {
+        postponed = item.$.statusText
+        homeTeamScore = "0"
+        awayTeamScore = "0"
+    } else {
+        if (!item.result) {
+            //console.log("ListItem -> item", item)
+            homeTeamScore = "0"
+            awayTeamScore = "0"
+        } else {
+            homeTeamScore = item.result[0].home[0].$.score
+            awayTeamScore = item.result[0].away[0].$.score
+        }
+    }
+
+    const homeTeam = (item.homeTeam) ? getTeamName(item.homeTeam[0]) : "Error"
+   
+    //console.log("ListItem -> homeTeamScore", homeTeamScore)
+    const awayTeam = (item.awayTeam) ? getTeamName(item.awayTeam[0]) : "Error"
+
 
     const RightActions = ({ progress, dragX, onPress, item}) => {
         const scale = dragX.interpolate({
@@ -40,6 +68,19 @@ export default function ListItem ({item, index, navigation}){
         }else{
             return colours[1];
         }
+    } 
+
+    // Returns the home team 
+    function getTeamName (item) {
+       let teamName
+      if (typeof item === 'object') {
+        teamName = item["_"]
+       } else if (typeof item === 'string' || item instanceof String) {
+        teamName = item
+       } else {
+        teamName = ""
+       }
+       return teamName
     }
 
     return (
@@ -48,13 +89,28 @@ export default function ListItem ({item, index, navigation}){
                 <RightActions progress={progress} dragX={dragX} item={item}/>
             )}>
             <View style={styles.row}>
+            { postponed && 
+                        <Text style={styles.home}>
+                            {postponed}
+                        </Text>
+                    }    
                 <View style={[styles.container, {backgroundColor: random()}]}>
-                    <Text style={styles.home}>
-                        {homeTeam}
-                    </Text>
-                    <Text style={styles.guest}>
-                        {awayTeam}
-                    </Text>
+                    <View style={[styles.homeTeamContainer]}>
+                        <Text style={styles.home}>
+                            {homeTeam}
+                        </Text>
+                        <Text style={styles.score}>
+                            {homeTeamScore}
+                        </Text>
+                    </View>
+                    <View style={[styles.awayTeamContainer]}>
+                        <Text style={styles.away}>
+                            {awayTeam}
+                        </Text>
+                        <Text style={styles.score}>
+                            {awayTeamScore}
+                        </Text>
+                    </View>
                 </View>
             </View>
         </Swipeable>
@@ -73,15 +129,28 @@ const styles = StyleSheet.create({
     },
 
     container:{
-        padding: 10
+        padding: 10,
+        flex: 1, 
+        flexDirection: 'row',
+        justifyContent: "space-evenly"
     },
 
-    guest: {
-        marginTop: 25,
-        marginBottom: 5,
+    homeTeamContainer:{
+        width: "50%",
+        flexDirection: 'column',
+        justifyContent: "space-evenly"
+    },
+
+    awayTeamContainer:{
+        width: "50%"
+    },
+
+    away: {
+        marginTop: 5,
         fontSize: 17,
+        lineHeight: 21,
         color: '#000000',
-        textAlign: "right"
+        textAlign: "center"
     },
 
     home: {
@@ -89,6 +158,15 @@ const styles = StyleSheet.create({
         fontSize: 17,
         lineHeight: 21,
         color: '#000000',
+        textAlign: "center"
+    },
+
+    score: {
+        marginTop: 5,
+        fontSize: 17,
+        lineHeight: 21,
+        color: '#000000',
+        textAlign: "center"
     },
 
     buttons:{
@@ -113,3 +191,4 @@ const styles = StyleSheet.create({
         padding: 20,
     }
 });
+
