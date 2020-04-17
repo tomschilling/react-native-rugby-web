@@ -8,12 +8,7 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { parseString } from 'react-native-xml2js';
-
-
-//import axios from 'axios';
-
 import { getGames } from "../actions/GameActions";
-
 import ListItem from "./ListItem";
 
 export default function Home(props) {
@@ -31,26 +26,51 @@ export default function Home(props) {
 
     //2 - MAIN CODE BEGINS HERE
     useEffect(() => {
+
         async function getData () {
+
             setIsFetching(true);
 
-            const response = await fetch('http://www.rugbyweb.de/db2xml.php?dtd=rugbyweb1.0&league=BL1N')
-            const text = await response.text()
-            let extractedData
-            parseString(text, function(err,result){
-                extractedData = JSON.stringify(result)
-            });
-            const allBL1NorthData = JSON.parse(extractedData)
-            const bl1NorthMatches = allBL1NorthData.rwleague.matches[0].match
+            const allMatches = await getAllMatches()
 
-            dispatch(getGames(bl1NorthMatches));
+            dispatch(getGames(allMatches));
 
             setIsFetching(false)
-
+            
         }
         getData()
     }, []);
 
+
+    async function getAllMatches() {
+
+        let matches = []
+        let leagueArray = ["BL1N", "BL1S"]
+
+        for (league of leagueArray) {
+
+            console.log("getAllMatches -> league", league)
+        
+             const url = 'http://www.rugbyweb.de/db2xml.php?dtd=rugbyweb1.0&league=' + league
+             console.log("getAllMatches -> url", url)
+     
+             const response = await fetch(url)
+             const text = await response.text()
+             let extractedData
+             parseString(text, function(err,result){
+                 extractedData = JSON.stringify(result)
+             });
+             const leagueData = JSON.parse(extractedData)
+             const leagueMatches = leagueData.rwleague.matches[0].match
+        
+             matches.push.apply(matches, leagueMatches);
+
+         }
+
+         return new Promise(resolve => {
+            resolve(matches)
+          });
+    }
     //==================================================================================================
 
     //4 - RENDER FLATLIST ITEM
@@ -100,24 +120,5 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flex: 1,
     },
-
-    floatingButton:{
-        backgroundColor: '#6B9EFA',
-        borderColor: '#6B9EFA',
-        height: 55,
-        width: 55,
-        borderRadius: 55 / 2,
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'absolute',
-        bottom: 60,
-        right: 15,
-        shadowColor: "#000000",
-        shadowOpacity: 0.5,
-        shadowRadius: 2,
-        shadowOffset: {
-            height: 1,
-            width: 0
-        }
-    }
 });
+
