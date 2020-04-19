@@ -12,26 +12,25 @@ export default function ListItem ({item, index, navigation}){
     // Add error handling 
 
     let postponed 
-    let homeTeamScore
-    let awayTeamScore
-    if (item.$ && item.$.status && item.$.status === "1") {
-        postponed = (item.$.statusText === "verlegt") ? "postponed" : item.$.statusText
-        homeTeamScore = "0"
-        awayTeamScore = "0"
-    } else {
-        if (!item.result) {
-            //console.log("ListItem -> item", item)
-            homeTeamScore = "0"
-            awayTeamScore = "0"
-        } else {
-            homeTeamScore = item.result[0].home[0].$.score
-            awayTeamScore = item.result[0].away[0].$.score
+    let homeTeamScore = "0"
+    let awayTeamScore = "0"
+   
+    if (item.$ && item.$.status && item.$.statusText) {
+        if (item.$.statusText === "verlegt") {        
+            postponed = "postponed" 
+        } else if (item.$.statusText === "ausgesetzt") {
+            postponed = "suspended" 
+
         }
+    }
+    
+    if (item.result) {
+        homeTeamScore = item.result[0].home[0].$.score
+        awayTeamScore = item.result[0].away[0].$.score
     }
 
     const homeTeam = (item.homeTeam) ? getTeamName(item.homeTeam[0]) : "Error"
     const awayTeam = (item.awayTeam) ? getTeamName(item.awayTeam[0]) : "Error"
-
 
     const RightActions = ({ progress, dragX, onPress, item}) => {
         const scale = dragX.interpolate({
