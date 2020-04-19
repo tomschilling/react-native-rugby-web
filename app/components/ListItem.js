@@ -15,7 +15,7 @@ export default function ListItem ({item, index, navigation}){
     let homeTeamScore
     let awayTeamScore
     if (item.$ && item.$.status && item.$.status === "1") {
-        postponed = item.$.statusText
+        postponed = (item.$.statusText === "verlegt") ? "postponed" : item.$.statusText
         homeTeamScore = "0"
         awayTeamScore = "0"
     } else {
@@ -83,7 +83,7 @@ export default function ListItem ({item, index, navigation}){
             )}>
             <View style={styles.row}>
             { postponed && 
-                        <Text style={styles.home}>
+                        <Text style={styles.postponed}>
                             {postponed}
                         </Text>
                     }    
@@ -148,6 +148,16 @@ const styles = StyleSheet.create({
 
     home: {
         marginTop: 5,
+        fontSize: 17,
+        lineHeight: 21,
+        color: '#000000',
+        textAlign: "center"
+    },
+
+
+    postponed: {
+        marginTop: 5,
+        marginBottom: 10,
         fontSize: 17,
         lineHeight: 21,
         color: '#000000',
