@@ -29,7 +29,9 @@ export default function Home(props) {
         async function getData () {
             setIsFetching(true);
 
-            const matches = await getAllMatches()
+            let leagueArray = ["BL1N", "BL1S"]
+            // let leagueArray = ["BL1N", "BL1S", "BL2N", "BL2O", "BL2S", "BL2W","RLnordost", "RLbayern"]
+            const matches = await getAllMatches(leagueArray)
 
             const sortedMatches = matches.sort(function(a, b) {
                 const aDate = moment(a.$.date, "DD.MM.YYYY").toISOString()
@@ -45,27 +47,12 @@ export default function Home(props) {
     }, []);
 
 
-    async function getAllMatches() {
+    async function getAllMatches(leagueArray) {
         let matches = []
-        let leagueArray = ["BL1N", "BL1S"]
-        // let leagueArray = ["BL1N", "BL1S", "BL2N", "BL2O", "BL2S", "BL2W","RLnordost", "RLbayern"]
-
         for (league of leagueArray) {
             try {          
-                const url = 'http://www.rugbyweb.de/db2xml.php?dtd=rugbyweb1.0&league=' + league  
-
-                const response = await fetch(url).catch((e) => { throw e })
-                const text = await response.text().catch((e) => { throw e })
-
-                let extractedData
-                parseString(text, function(err,result){
-                    extractedData = JSON.stringify(result)
-                });
-
-                const leagueData = JSON.parse(extractedData)
-                const leagueMatches = leagueData.rwleague.matches[0].match
+                const leagueMatches = await getLeagueMatches(league).catch((e) => { throw e })
                 matches.push.apply(matches, leagueMatches);
-
             } catch (error) {          
                 console.log("ERROR - ", error)
             }
@@ -76,8 +63,36 @@ export default function Home(props) {
                 resolve(matches);
               }
             });
-
     }
+
+    async function getLeagueMatches(league) {
+        try {
+            const url = 'http://www.rugbyweb.de/db2xml.php?dtd=rugbyweb1.0&league=' + league  
+
+            const response = await fetch(url).catch((e) => { throw e })
+            const text = await response.text().catch((e) => { throw e })
+    
+            let extractedData
+            parseString(text, function(err,result){
+                extractedData = JSON.stringify(result)
+            });
+    
+            const leagueData = JSON.parse(extractedData)
+            const leagueMatches = leagueData.rwleague.matches[0].match
+    
+            return new Promise(resolve => {
+                if (leagueMatches) {
+                    resolve(leagueMatches);
+                  }
+              });
+        } catch (error) {  
+            return new Promise(reject => {
+                console.log("ERROR - ", error, league)
+                reject(`Error while fetching data for ${league}`);
+              });
+        }
+    }
+
 
     const renderItem = ({item, index}) => {
         return (
