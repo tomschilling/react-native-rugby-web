@@ -16,83 +16,76 @@ export default function Home(props) {
     const dispatch = useDispatch();
     const { navigation } = props;
 
-    //1 - DECLARE VARIABLES
+    // VARIABLES
     const [isFetching, setIsFetching] = useState(false);
 
-    //Access Redux Store State
+    // Access Redux Store State
     const dataReducer = useSelector((state) => state.dataReducer);
     const { games } = dataReducer;
 
-    //==================================================================================================
 
-    //2 - MAIN CODE BEGINS HERE
+    // MAIN CODE
     useEffect(() => {
-
         async function getData () {
-
             setIsFetching(true);
 
-            const allMatches = await getAllMatches()
+            const matches = await getAllMatches()
 
-            const sortedAllMatches = allMatches.sort(function(a, b) {
+            const sortedMatches = matches.sort(function(a, b) {
                 const aDate = moment(a.$.date, "DD.MM.YYYY").toISOString()
                 const bDate = moment(b.$.date, "DD.MM.YYYY").toISOString()
                 return moment(aDate).diff(moment(bDate))
             });
 
-            dispatch(getGames(sortedAllMatches));
+            dispatch(getGames(sortedMatches));
 
             setIsFetching(false)
-            
         }
         getData()
     }, []);
 
 
     async function getAllMatches() {
-
         let matches = []
-       // let leagueArray = ["BL1N", "BL1S", "BL2N", "BL2O", "BL2S", "BL2W","RLnordost", "RLbayern"]
         let leagueArray = ["BL1N", "BL1S"]
+        // let leagueArray = ["BL1N", "BL1S", "BL2N", "BL2O", "BL2S", "BL2W","RLnordost", "RLbayern"]
 
         for (league of leagueArray) {
+            try {          
+                const url = 'http://www.rugbyweb.de/db2xml.php?dtd=rugbyweb1.0&league=' + league  
 
-            console.log("getAllMatches -> league", league)
-        
-             const url = 'http://www.rugbyweb.de/db2xml.php?dtd=rugbyweb1.0&league=' + league
-             console.log("getAllMatches -> url", url)
-     
-             const response = await fetch(url)
-             const text = await response.text()
-             let extractedData
-             parseString(text, function(err,result){
-                 extractedData = JSON.stringify(result)
-             });
-             const leagueData = JSON.parse(extractedData)
-             const leagueMatches = leagueData.rwleague.matches[0].match
-        
-             matches.push.apply(matches, leagueMatches);
+                const response = await fetch(url).catch((e) => { throw e })
+                const text = await response.text().catch((e) => { throw e })
 
+                let extractedData
+                parseString(text, function(err,result){
+                    extractedData = JSON.stringify(result)
+                });
+
+                const leagueData = JSON.parse(extractedData)
+                const leagueMatches = leagueData.rwleague.matches[0].match
+                matches.push.apply(matches, leagueMatches);
+
+            } catch (error) {          
+                console.log("ERROR - ", error)
+            }
          }
 
-      
+         return new Promise(function(resolve, reject) {
+              if (matches) {
+                resolve(matches);
+              }
+            });
 
-         return new Promise(resolve => {
-            resolve(matches)
-          });
     }
-    //==================================================================================================
 
-    //4 - RENDER FLATLIST ITEM
     const renderItem = ({item, index}) => {
         return (
             <ListItem item={item} index={index} navigation={navigation}/>
         )
     };
 
-    //==================================================================================================
-
-    //7 - RENDER
+    // RENDER
     if (isFetching) {
         return (
             <View style={styles.activityIndicatorContainer}>
@@ -106,12 +99,6 @@ export default function Home(props) {
                     data={games}
                     renderItem={renderItem}
                     keyExtractor={(item, index) => `games_${index}`}/>
-
-                {/* <TouchableHighlight style={styles.floatingButton}
-                                    underlayColor='#ff7043'
-                                    onPress={() => navigation.navigate('NewQuote', {title:"New Quote"})}>
-                    <Text style={{fontSize: 25, color: 'white'}}>+</Text>
-                </TouchableHighlight> */}
             </SafeAreaView>
         );
     }
