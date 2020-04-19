@@ -54,11 +54,6 @@ const AppStack = createStackNavigator(
   {
     defaultNavigationOptions: {
       headerTintColor: 'black',
-      // headerStyle: {
-      //   ...Platform.select({
-      //     ios: { backgroundColor: 'white' }
-      //   })
-      // },
       cardStyle: {
         backgroundColor: 'white'
       }

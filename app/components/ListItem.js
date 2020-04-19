@@ -9,12 +9,7 @@ let colours = ["#F8F8F8", "#F1F1F1"];
 export default function ListItem ({item, index, navigation}){
     const inputEl = useRef(null);
 
-    //if (!item) return
-
-   // item = (typeof item === 'object') ? item : item[0]
-
-    //console.log("ListItem -> item", item)
-
+    // Add error handling 
 
     let postponed 
     let homeTeamScore
@@ -35,8 +30,6 @@ export default function ListItem ({item, index, navigation}){
     }
 
     const homeTeam = (item.homeTeam) ? getTeamName(item.homeTeam[0]) : "Error"
-   
-    //console.log("ListItem -> homeTeamScore", homeTeamScore)
     const awayTeam = (item.awayTeam) ? getTeamName(item.awayTeam[0]) : "Error"
 
 
