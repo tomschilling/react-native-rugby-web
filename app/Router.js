@@ -5,8 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { SimpleLineIcons } from '@expo/vector-icons';
 
-import HomeScreen from './components/Home';
-
+import GamesScreen from './screens/GamesScreen';
 import SettingsScreen from './screens/SettingsScreen';
 
 function DetailsScreen() {
@@ -17,14 +16,14 @@ function DetailsScreen() {
   );
 }
 
-const HomeStack = createStackNavigator();
+const GamesStack = createStackNavigator();
 
-function HomeStackScreen() {
+function GamesStackScreen() {
   return (
-    <HomeStack.Navigator>
-      <HomeStack.Screen name="Home" component={HomeScreen} />
-      <HomeStack.Screen name="Details" component={DetailsScreen} />
-    </HomeStack.Navigator>
+    <GamesStack.Navigator>
+      <GamesStack.Screen name="Games" component={GamesScreen} />
+      <GamesStack.Screen name="Details" component={DetailsScreen} />
+    </GamesStack.Navigator>
   );
 }
 
@@ -46,15 +45,15 @@ export default function Router() {
     <NavigationContainer>
       <Tab.Navigator
          screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
+          tabBarIcon: ({ focused, color, size }) => {            
             let iconName;
             const routeName = route.name
 
-            if (routeName === 'Home') iconName = 'trophy';
+            if (routeName === 'Games') iconName = 'trophy';
             else if (routeName === 'Settings') iconName = 'settings';
     
             return (
-              <SimpleLineIcons name={iconName} size={24} color={color} />
+              <SimpleLineIcons name={iconName} size={size} color={color} />
             );
           },
         })}
@@ -62,7 +61,7 @@ export default function Router() {
           activeTintColor: 'black',
           inactiveTintColor: 'gray'
         }}>
-        <Tab.Screen name="Home" component={HomeStackScreen} />
+        <Tab.Screen name="Games" component={GamesStackScreen} />
         <Tab.Screen name="Settings" component={SettingsStackScreen} />
       </Tab.Navigator>
     </NavigationContainer>

@@ -10,7 +10,7 @@ import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { parseString } from 'react-native-xml2js';
 import { getGames } from "../actions/GameActions";
-import ListItem from "./ListItem";
+import ListItem from "../components/ListItem";
 
 export default function Home({ route }) {
     const dispatch = useDispatch();
