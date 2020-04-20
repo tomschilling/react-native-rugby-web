@@ -1,75 +1,69 @@
 import React from 'react';
-import { createAppContainer, createSwitchNavigator } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
-import { createBottomTabNavigator } from 'react-navigation-tabs'
+
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { SimpleLineIcons } from '@expo/vector-icons';
 
-import HomeScreen from './components/Home';
-
+import GamesScreen from './screens/GamesScreen';
 import SettingsScreen from './screens/SettingsScreen';
-import LoadingScreen from './components/LoadingScreen'
 
+function DetailsScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Details!</Text>
+    </View>
+  );
+}
 
-const Tabs = createBottomTabNavigator(
-  {
-    Games: {
-      screen: HomeScreen,
-      navigationOptions: ({ navigation }) => ({
-        title: `Games`,
-        }),
-    },
-    Settings:{
-        screen: SettingsScreen,
-        navigationOptions: ({ navigation }) => ({
-            title: `Settings`,
-        }),
-    }
-  },
-  {
-    defaultNavigationOptions: ({ navigation }) => ({
-      tabBarIcon: ({ tintColor }) => {
-        const { routeName } = navigation.state;
-        let iconName;
-        if (routeName === 'Games') iconName = 'trophy';
-        else if (routeName === 'Settings') iconName = 'settings';
+const GamesStack = createStackNavigator();
 
-        return (
-          <SimpleLineIcons name={iconName} size={24} color={tintColor} />
-        );
-      }
-    }),
-    tabBarOptions: {
-      activeTintColor: 'black',
-      inactiveTintColor: '#929292'
-    }
-  }
-);
+function GamesStackScreen() {
+  return (
+    <GamesStack.Navigator>
+      <GamesStack.Screen name="Games" component={GamesScreen} />
+      <GamesStack.Screen name="Details" component={DetailsScreen} />
+    </GamesStack.Navigator>
+  );
+}
 
-const AppStack = createStackNavigator(
-  {
-    Home: {
-      screen: Tabs,
-    }  
-  },
-  {
-    defaultNavigationOptions: {
-      headerTintColor: 'black',
-      cardStyle: {
-        backgroundColor: 'white'
-      }
-    }
-  }
-);
+const SettingsStack = createStackNavigator();
 
+function SettingsStackScreen() {
+  return (
+    <SettingsStack.Navigator>
+      <SettingsStack.Screen name="Settings" component={SettingsScreen} />
+      <SettingsStack.Screen name="Details" component={DetailsScreen} />
+    </SettingsStack.Navigator>
+  );
+}
 
-const RoutesStack = createSwitchNavigator(
-    {
-        Loading: LoadingScreen,
-        App: AppStack
-    },
-    {initialRouteName: 'Loading'}
-);
+const Tab = createBottomTabNavigator();
 
-const Router = createAppContainer(RoutesStack);
+export default function Router() {
+  return (
+    <NavigationContainer>
+      <Tab.Navigator
+         screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {            
+            let iconName;
+            const routeName = route.name
 
-export default Router;
+            if (routeName === 'Games') iconName = 'trophy';
+            else if (routeName === 'Settings') iconName = 'settings';
+    
+            return (
+              <SimpleLineIcons name={iconName} size={size} color={color} />
+            );
+          },
+        })}
+        tabBarOptions={{
+          activeTintColor: 'black',
+          inactiveTintColor: 'gray'
+        }}>
+        <Tab.Screen name="Games" component={GamesStackScreen} />
+        <Tab.Screen name="Settings" component={SettingsStackScreen} />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+}

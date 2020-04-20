@@ -1,8 +1,8 @@
 import React, {useRef} from 'react';
 import { View, Text, StyleSheet, Animated } from 'react-native';
 
-import {RectButton} from 'react-native-gesture-handler';
-import Swipeable from 'react-native-gesture-handler/Swipeable';
+//import {RectButton} from 'react-native-gesture-handler';
+//import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 let colours = ["#F8F8F8", "#F1F1F1"];
 
@@ -32,26 +32,26 @@ export default function ListItem ({item, index, navigation}){
     const homeTeam = (item.homeTeam) ? getTeamName(item.homeTeam[0]) : "Error"
     const awayTeam = (item.awayTeam) ? getTeamName(item.awayTeam[0]) : "Error"
 
-    const RightActions = ({ progress, dragX, onPress, item}) => {
-        const scale = dragX.interpolate({
-            inputRange: [-100, 0],
-            outputRange: [1, 0],
-            extrapolate: 'clamp',
-        });
-        return (
-            <View style={styles.buttons}>
-                <RectButton onPress={() =>  {
-                    inputEl.current.close();
-                }}>
-                    <View style={[styles.rightAction, styles.editAction]}>
-                        <Animated.Text style={[styles.actionText, { transform: [{ scale }] }]}>
-                            Details Page coming
-                        </Animated.Text>
-                    </View>
-                </RectButton>
-            </View>
-        );
-    };
+    // const RightActions = ({ progress, dragX, onPress, item}) => {
+    //     const scale = dragX.interpolate({
+    //         inputRange: [-100, 0],
+    //         outputRange: [1, 0],
+    //         extrapolate: 'clamp',
+    //     });
+    //     return (
+    //         <View style={styles.buttons}>
+    //             <RectButton onPress={() =>  {
+    //                 inputEl.current.close();
+    //             }}>
+    //                 <View style={[styles.rightAction, styles.editAction]}>
+    //                     <Animated.Text style={[styles.actionText, { transform: [{ scale }] }]}>
+    //                         Details Page coming
+    //                     </Animated.Text>
+    //                 </View>
+    //             </RectButton>
+    //         </View>
+    //     );
+    // };
 
     //Returns a colour based on the index
     function random() {
@@ -76,10 +76,10 @@ export default function ListItem ({item, index, navigation}){
     }
 
     return (
-        <Swipeable  ref={inputEl}
-            renderRightActions={(progress, dragX) => (
-                <RightActions progress={progress} dragX={dragX} item={item}/>
-            )}>
+        // <Swipeable  ref={inputEl}
+        //     renderRightActions={(progress, dragX) => (
+        //         <RightActions progress={progress} dragX={dragX} item={item}/>
+        //     )}>
             <View style={styles.row}>
             { postponed && 
                         <Text style={styles.postponed}>
@@ -105,7 +105,7 @@ export default function ListItem ({item, index, navigation}){
                     </View>
                 </View>
             </View>
-        </Swipeable>
+        //</Swipeable>
     )
 
 };
