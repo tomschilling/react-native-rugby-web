@@ -5,7 +5,9 @@ import { AppLoading } from 'expo';
 import SampleData from '../sample'
 
 //1 - LOADING SCREEN
-export default function LoadingScreen(props) {
+export default function LoadingScreen({ routes }) {
+
+    console.log("LoadingScreen -> routes", routes)
 
     useEffect(() => checkLocalData(), []);
 
@@ -16,9 +18,9 @@ export default function LoadingScreen(props) {
             if (data === null){
                 AsyncStorage.setItem('games', JSON.stringify(SampleData.games));//save the initial data in Async
 
-                props.navigation.navigate('App'); //Navigate to the home page
+                routes.navigate('Home'); //Navigate to the home page
             }else{
-                props.navigation.navigate('App'); //Navigate to the home page
+                routes.navigate('Home'); //Navigate to the home page
             }
         });
     }

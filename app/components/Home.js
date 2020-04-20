@@ -12,9 +12,9 @@ import { parseString } from 'react-native-xml2js';
 import { getGames } from "../actions/GameActions";
 import ListItem from "./ListItem";
 
-export default function Home(props) {
+export default function Home({ route }) {
     const dispatch = useDispatch();
-    const { navigation } = props;
+   // const { navigation } = props;
 
     // VARIABLES
     const [isFetching, setIsFetching] = useState(false);
@@ -96,7 +96,7 @@ export default function Home(props) {
 
     const renderItem = ({item, index}) => {
         return (
-            <ListItem item={item} index={index} navigation={navigation}/>
+            <ListItem item={item} index={index} navigation={route}/>
         )
     };
 
