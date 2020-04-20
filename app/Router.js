@@ -1,7 +1,9 @@
 import React from 'react';
-import { createAppContainer, createSwitchNavigator } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
-import { createBottomTabNavigator } from 'react-navigation-tabs'
+//import { NavigationContainer } from '@react-navigation/native';
+//import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { SimpleLineIcons } from '@expo/vector-icons';
 
 import HomeScreen from './components/Home';
@@ -62,14 +64,16 @@ const AppStack = createStackNavigator(
 );
 
 
-const RoutesStack = createSwitchNavigator(
+const RoutesStack = createStackNavigator(
     {
         Loading: LoadingScreen,
         App: AppStack
     },
-    {initialRouteName: 'Loading'}
+    {
+      initialRouteName: 'Loading'
+    }
 );
 
-const Router = createAppContainer(RoutesStack);
+const Router = NavigationContainer(RoutesStack);
 
 export default Router;
