@@ -1,0 +1,14 @@
+{
+    "settings": [
+        {
+            "leagueKey": "BL1N",
+            "leagueTitle": "1. Bundesliga Nord/Ost",
+            "leagueState": true
+        },
+        {
+            "leagueKey": "BL1S",
+            "leagueTitle": "1. Bundesliga Nord/Ost",
+            "leagueState": false
+        }
+    ]
+}

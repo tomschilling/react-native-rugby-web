@@ -1,15 +1,15 @@
 import { combineReducers } from 'redux';
 
-import { GET_GAMES } from "../actions/GameActions" 
+import { GET_SETTINGS } from "../actions/SettingsActions" 
 
-let dataState = { games: [] };
+let dataState = { settings: [] };
 
 const dataReducer = (state = dataState, action) => {
     switch (action.type) {
-        case GET_GAMES:
-            let { games } = action.data;
+        case GET_SETTINGS:
+            let { settings } = action.data;
 
-            return {...state, games};
+            return {...state, settings};
             
         default:
             return state;

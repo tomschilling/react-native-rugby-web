@@ -4,15 +4,16 @@ import {
     StyleSheet,
     SafeAreaView,
     View,
-    ActivityIndicator
+    ActivityIndicator,
+    AsyncStorage
 } from 'react-native';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { parseString } from 'react-native-xml2js';
 import { getGames } from "../actions/GameActions";
-import ListItem from "../components/ListItem";
+import GamesListItem from "../components/GamesListItem";
 
-export default function Home({ route }) {
+export default function Games({ route }) {
     const dispatch = useDispatch();
    // const { navigation } = props;
 
@@ -23,11 +24,11 @@ export default function Home({ route }) {
     const dataReducer = useSelector((state) => state.dataReducer);
     const { games } = dataReducer;
 
-
     // MAIN CODE
     useEffect(() => {
         async function getData () {
             setIsFetching(true);
+
 
             let leagueArray = ["BL1N", "BL1S"]
             // let leagueArray = ["BL1N", "BL1S", "BL2N", "BL2O", "BL2S", "BL2W","RLnordost", "RLbayern"]
@@ -96,7 +97,7 @@ export default function Home({ route }) {
 
     const renderItem = ({item, index}) => {
         return (
-            <ListItem item={item} index={index} navigation={route}/>
+            <GamesListItem item={item} index={index} navigation={route}/>
         )
     };
 
