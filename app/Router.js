@@ -7,6 +7,8 @@ import { SimpleLineIcons } from '@expo/vector-icons';
 
 import GamesScreen from './screens/GamesScreen';
 import SettingsScreen from './screens/SettingsScreen';
+import SplashScreen from './screens/SplashScreen';
+
 
 function DetailsScreen() {
   return (
@@ -40,10 +42,9 @@ function SettingsStackScreen() {
 
 const Tab = createBottomTabNavigator();
 
-export default function Router() {
+function MainTabContainer() {
   return (
-    <NavigationContainer>
-      <Tab.Navigator
+    <Tab.Navigator
          screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {            
             let iconName;
@@ -64,6 +65,21 @@ export default function Router() {
         <Tab.Screen name="Games" component={GamesStackScreen} />
         <Tab.Screen name="Settings" component={SettingsStackScreen} />
       </Tab.Navigator>
+  )
+}
+
+const AppStack = createStackNavigator();
+
+
+export default function Router() {
+  return (
+    <NavigationContainer>
+       <AppStack.Navigator
+          initialRouteName="SplashScreen"
+          headerMode="none">
+          <AppStack.Screen name="SplashScreen" component={SplashScreen}/>
+          <AppStack.Screen name="MainTabContainer" component={MainTabContainer} />
+      </AppStack.Navigator>
     </NavigationContainer>
   );
 }

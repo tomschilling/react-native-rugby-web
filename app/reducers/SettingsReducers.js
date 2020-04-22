@@ -1,10 +1,8 @@
-import { combineReducers } from 'redux';
-
 import { GET_SETTINGS } from "../actions/SettingsActions" 
 
 let dataState = { settings: [] };
 
-const dataReducer = (state = dataState, action) => {
+const settingsReducer = (state = dataState, action) => {
     switch (action.type) {
         case GET_SETTINGS:
             let { settings } = action.data;
@@ -16,6 +14,4 @@ const dataReducer = (state = dataState, action) => {
     }
 };
 
-const rootReducer = combineReducers({dataReducer});
-
-export default rootReducer;
+export default settingsReducer;

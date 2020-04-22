@@ -10,9 +10,6 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { getSettings } from "../actions/SettingsActions";
 import SettingsListItem from "../components/SettingsListItem";
-import SampleData from '../sample'
-
-
 
 export default function Settings({ route }) {
     const dispatch = useDispatch();
@@ -22,35 +19,66 @@ export default function Settings({ route }) {
     const [isFetching, setIsFetching] = useState(false);
 
     // Access Redux Store State
-    const dataReducer = useSelector((state) => state.dataReducer);
-    const { settings } = dataReducer;
+    const settingsReducer = useSelector((state) => state.settingsReducer);
+    const { settings } = settingsReducer;
 
 
     //2 - MAIN CODE BEGINS HERE
-    useEffect(() => getData(), []);
+    useEffect(() => {
+        async function getSettingsData() {
+            setIsFetching(true);
+            
+            const settings = await AsyncStorage.getItem('settings')
+            console.log("getData -> settings", settings)
+            
+            dispatch(getSettings(JSON.parse(settings)));
+        
+            setIsFetching(false)
+        }
+        getSettingsData()
+    }, []);
 
     //==================================================================================================
 
     //3 - GET FLATLIST DATA
-    const getData = () => {
-        setIsFetching(true);
+    // async function getLocalSettings() {
+    //     try {
+    //         const settings = await AsyncStorage.getItem('settings', (err, data) => {
+    //             console.log("checkLocalData -> data", data)
+    //                 //if it doesn't exist, extract from json fil
+    //                 if (data === null){
+    //                     try {
+    //                     const initialSettings = AsyncStorage.setItem('settings', JSON.stringify(SampleData.settings));//save the initial data in Async
+                        
+    //                     return new Promise(function(resolve) {
+    //                         if (initialSettings) {
+    //                           resolve(initialSettings);
+    //                         }
+    //                       });
 
-        AsyncStorage.getItem('settings', (err, data) => {
-        console.log("getData -> data", data)
-          
-            //if it doesn't exist, extract from json fil
-            if (data === null){
-                AsyncStorage.setItem('settings', JSON.stringify(SampleData.settings));//save the initial data in Async
-            } else {
-              dispatch(getSettings(JSON.parse(data)));
-            }
-        });
+    //                     } catch (error) {
 
-      //getSettings(JSON.parse(settings)));
+    //                     console.log("getSettings -> error -> initialSettings", error)
 
+    //                     }
+                        
+    //                 }             
+    //             });
+                
+    //         if (settings !== null) {
+    //             return new Promise(function(resolve) {
+    //                 if (settings) {
+    //                   resolve(settings);
+    //                 }
+    //               });
+    //         }
+    //       } catch (error) {
 
-      setIsFetching(false);
-    };
+    //         console.log("getSettings -> error", error)
+
+    //       }
+
+    // };
 
     const renderItem = ({item, index}) => {
         return (

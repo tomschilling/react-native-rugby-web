@@ -1,10 +1,9 @@
-import { combineReducers } from 'redux';
 
 import { GET_GAMES } from "../actions/GameActions" 
 
 let dataState = { games: [] };
 
-const dataReducer = (state = dataState, action) => {
+const gamesReducer = (state = dataState, action) => {
     switch (action.type) {
         case GET_GAMES:
             let { games } = action.data;
@@ -16,6 +15,4 @@ const dataReducer = (state = dataState, action) => {
     }
 };
 
-const rootReducer = combineReducers({dataReducer});
-
-export default rootReducer;
+export default gamesReducer;
