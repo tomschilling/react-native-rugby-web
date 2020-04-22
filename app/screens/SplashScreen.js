@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { AsyncStorage, StyleSheet, View, Text } from 'react-native';
-//import { AppLoading } from 'expo';
 import SampleData from '../sample'
 
 export default function SplashScreen({ navigation }) {
@@ -26,7 +25,6 @@ export default function SplashScreen({ navigation }) {
     const checkIsPopulated = async() => {
         return new Promise((resolve) =>
         AsyncStorage.getItem('settings', (err, data) => {
-            console.log("checkLocalData -> data", data)
             if (data === null) {
                 resolve(false) 
             } else {

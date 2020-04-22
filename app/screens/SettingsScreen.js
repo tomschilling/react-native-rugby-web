@@ -38,48 +38,6 @@ export default function Settings({ route }) {
         getSettingsData()
     }, []);
 
-    //==================================================================================================
-
-    //3 - GET FLATLIST DATA
-    // async function getLocalSettings() {
-    //     try {
-    //         const settings = await AsyncStorage.getItem('settings', (err, data) => {
-    //             console.log("checkLocalData -> data", data)
-    //                 //if it doesn't exist, extract from json fil
-    //                 if (data === null){
-    //                     try {
-    //                     const initialSettings = AsyncStorage.setItem('settings', JSON.stringify(SampleData.settings));//save the initial data in Async
-                        
-    //                     return new Promise(function(resolve) {
-    //                         if (initialSettings) {
-    //                           resolve(initialSettings);
-    //                         }
-    //                       });
-
-    //                     } catch (error) {
-
-    //                     console.log("getSettings -> error -> initialSettings", error)
-
-    //                     }
-                        
-    //                 }             
-    //             });
-                
-    //         if (settings !== null) {
-    //             return new Promise(function(resolve) {
-    //                 if (settings) {
-    //                   resolve(settings);
-    //                 }
-    //               });
-    //         }
-    //       } catch (error) {
-
-    //         console.log("getSettings -> error", error)
-
-    //       }
-
-    // };
-
     const renderItem = ({item, index}) => {
         return (
             <SettingsListItem item={item} index={index} navigation={route}/>
