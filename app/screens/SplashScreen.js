@@ -37,7 +37,7 @@ export default function SplashScreen({ navigation }) {
     return (
         <View style={styles.viewStyles}>
             <Text style={styles.textStyles}>
-                Splaaaaash
+                RugbyWeb
             </Text>
         </View>
     );
@@ -48,11 +48,10 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'orange'
+        backgroundColor: 'white'
     },
     textStyles: {
-        color: 'white',
-        fontSize: 40,
-        fontWeight: 'bold'
+        color: 'black',
+        fontSize: 40
     }
 })
