@@ -4,49 +4,64 @@ import {
     StyleSheet,
     SafeAreaView,
     View,
-    ActivityIndicator
+    ActivityIndicator,
+    AsyncStorage
 } from 'react-native';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { parseString } from 'react-native-xml2js';
 import { getGames } from "../actions/GameActions";
 import GamesListItem from "../components/GamesListItem";
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function Games({ navigation }) {
     const dispatch = useDispatch();
-   // const { navigation } = props;
 
-   navigation.canGoBack(false)
+    // User can not go back to SplashScreen
+    navigation.canGoBack(false)
 
-    // VARIABLES
+    // Variables
     const [isFetching, setIsFetching] = useState(false);
 
     // Access Redux Store State
     const gamesReducer = useSelector((state) => state.gamesReducer);
     const { games } = gamesReducer;
 
-    // MAIN CODE
-    useEffect(() => {
-        async function getData () {
-            setIsFetching(true);
+    // Fetch games when th screen is focused
+    useFocusEffect(
+        React.useCallback(() => {
+            async function getData () {
+    
+                setIsFetching(true);
 
-            let leagueArray = ["BL1N", "BL1S"]
-            // let leagueArray = ["BL1N", "BL1S", "BL2N", "BL2O", "BL2S", "BL2W","RLnordost", "RLbayern"]
-            const matches = await getAllMatches(leagueArray)
+                const settingsString = await AsyncStorage.getItem('settings')
+                const settingsArr = JSON.parse(settingsString)
+    
+                let leagueArray = []
+                for (let { leagueKey, leagueState } of settingsArr) {
+                    if (leagueState) leagueArray.push(leagueKey)          
+                }
+    
+                const matches = await getAllMatches(leagueArray)
+    
+                const sortedMatches = matches.sort(function(a, b) {
+                    const aDate = moment(a.$.date, "DD.MM.YYYY").toISOString()
+                    const bDate = moment(b.$.date, "DD.MM.YYYY").toISOString()
+                    return moment(aDate).diff(moment(bDate))
+                });
+    
+                dispatch(getGames(sortedMatches));
+    
+                setIsFetching(false)
+            }
+            getData()
+      
+            return () => {
+              // Do something when the screen is unfocused
 
-            const sortedMatches = matches.sort(function(a, b) {
-                const aDate = moment(a.$.date, "DD.MM.YYYY").toISOString()
-                const bDate = moment(b.$.date, "DD.MM.YYYY").toISOString()
-                return moment(aDate).diff(moment(bDate))
-            });
-
-            dispatch(getGames(sortedMatches));
-
-            setIsFetching(false)
-        }
-        getData()
-    }, []);
-
+            };
+          }, [])
+    )
 
     async function getAllMatches(leagueArray) {
         let matches = []

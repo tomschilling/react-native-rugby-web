@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, Switch } from 'react-native';
+import { StyleSheet, View, Text, Switch, AsyncStorage } from 'react-native';
 
 export default function Settings({ item, index, navigation }) {
-    console.log("Settings -> item", item)
     const [ switchValue = item.leagueState, setSwitchValue ] = useState();
     const toggleSwitch = (value) => {
         setSwitchValue(value)
+        item.leagueState = value
+        updateSettings(item)
      }
      
       return (
@@ -26,6 +27,14 @@ export default function Settings({ item, index, navigation }) {
         </View>
       );
   }
+
+const updateSettings = async (item) => {
+  const settings = await AsyncStorage.getItem('settings')
+  const settingsArr = JSON.parse(settings)
+
+  Object.assign(settingsArr.find(setting => setting.id === item.id), { leagueState: item.leagueState} );
+  AsyncStorage.setItem('settings', JSON.stringify(settingsArr));
+}
   
 const styles = StyleSheet.create({
   row:{

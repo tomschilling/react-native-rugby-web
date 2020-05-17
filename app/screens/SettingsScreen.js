@@ -29,7 +29,6 @@ export default function Settings({ route }) {
             setIsFetching(true);
             
             const settings = await AsyncStorage.getItem('settings')
-            console.log("getData -> settings", settings)
             
             dispatch(getSettings(JSON.parse(settings)));
         
