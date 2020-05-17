@@ -6,18 +6,21 @@ let colours = ["#F8F8F8", "#F1F1F1"];
 export default function ListItem ({item, index, navigation}){
     const inputEl = useRef(null);
 
-    // Add error handling 
+    // @TODO: Add error handling 
 
     let reason 
     let homeTeamScore = "0"
     let awayTeamScore = "0"
    
     if (item.$ && item.$.status && item.$.statusText) {
+        // @TODO: Better to check for status code
         if (item.$.statusText === "verlegt") {        
             reason = "postponed" 
         } else if (item.$.statusText === "ausgesetzt") {
             reason = "suspended" 
-
+        }
+        else if (item.$.statusText === "abgesagt") {
+            reason = "cancelled" 
         }
     }
     
@@ -40,15 +43,15 @@ export default function ListItem ({item, index, navigation}){
 
     // Returns the home team 
     function getTeamName (item) {
-       let teamName
-      if (typeof item === 'object') {
-        teamName = item["_"]
-       } else if (typeof item === 'string' || item instanceof String) {
-        teamName = item
-       } else {
-        teamName = ""
-       }
-       return teamName
+        let teamName
+        if (typeof item === 'object') {
+            teamName = item["_"]
+        } else if (typeof item === 'string' || item instanceof String) {
+            teamName = item
+        } else {
+            teamName = ""
+        }
+        return teamName
     }
 
     return (

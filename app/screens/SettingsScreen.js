@@ -13,7 +13,7 @@ import SettingsListItem from "../components/SettingsListItem";
 
 export default function Settings({ route }) {
     const dispatch = useDispatch();
-   // const { navigation } = props;
+    // const { navigation } = props;
 
     // VARIABLES
     const [isFetching, setIsFetching] = useState(false);
@@ -21,7 +21,6 @@ export default function Settings({ route }) {
     // Access Redux Store State
     const settingsReducer = useSelector((state) => state.settingsReducer);
     const { settings } = settingsReducer;
-
 
     //2 - MAIN CODE BEGINS HERE
     useEffect(() => {
